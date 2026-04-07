@@ -12,6 +12,14 @@ Prediz produção a partir de séries temporais
 - Controle de Acesso
 - Configuração de parâmetros do modelo
 - Visualização de resultados
+### Tecnologias
+- Docker
+- Docker Compose    
+- React
+- TypeScript
+- Next.js
+- Postgresql
+- Rabbitmq
 ## GRUPO BRAVO - Mineração de dados e Treinamento Modelo
 - 1 Matheus dos Santos Moura
 - 2 Thiago Martins Garcia
@@ -23,6 +31,13 @@ Prediz produção a partir de séries temporais
 - Mineração de dados
 - Treinamento de modelo
 - Avaliação de modelo
+### Tecnologias
+- Docker
+- Docker Compose
+- Python
+- Pandas
+- NumPy
+- Postgresql
 
 ## GRUPO CHARLIE - Back-end
 - 1 Guilherme Henrique Alves da Costa
@@ -35,3 +50,10 @@ Prediz produção a partir de séries temporais
 - API REST - FastAPI para produção
 - Agente IA com Agnos
 - Interface com Telegram
+### Tecnologias
+- Docker
+- Docker Compose
+- Python
+- FastAPI
+- Agnos
+- Telegram
