@@ -20,6 +20,7 @@ Prediz produção a partir de séries temporais
 - Next.js
 - Postgresql
 - Rabbitmq
+
 ## GRUPO BRAVO - Mineração de dados e Treinamento Modelo
 - 1 Matheus dos Santos Moura
 - 2 Thiago Martins Garcia

@@ -1,0 +1,41 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: postgres
+    ports:
+      - "127.0.0.1:5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: estimador_inteligente
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - estimador_inteligente
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "127.0.0.1:5672:5672"
+      - "127.0.0.1:15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    networks:
+      - estimador_inteligente
+
+  redis:
+    image: redis:7
+    container_name: redis
+    ports:
+      - "127.0.0.1:6379:6379"
+    networks:
+      - estimador_inteligente
+
+  volumes:
+    postgres_data:
+
+  networks:
+    estimador_inteligente:
+      driver: bridge
