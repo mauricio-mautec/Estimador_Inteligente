@@ -1,41 +1,70 @@
 services:
   postgres:
-    image: postgres:15
-    container_name: postgres
-    ports:
-      - "127.0.0.1:5432:5432"
+    image: postgres:16
+    shm_size: "1gb"
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: estimador_inteligente
+      POSTGRES_PASSWORD: GXMLkQLSAaoTkjod
+      POSTGRES_USER: estimador
+      TZ: America/Sao_Paulo
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-    networks:
-      - estimador_inteligente
+      - ./database:/var/lib/postgresql/data
+    restart: always
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    ports:
+      - 127.0.0.1:6432:5432
+    command:
+      - postgres
+      - -c
+      - shared_buffers=1GB
+      - -c
+      - work_mem=64MB
+      - -c
+      - maintenance_work_mem=2GB
+      - -c
+      - effective_cache_size=1GB
+      - -c
+      - wal_level=replica
+      - -c
+      - wal_buffers=64MB
+      - -c
+      - max_wal_size=6GB
+      - -c
+      - max_connections=10
+      - -c
+      - max_worker_processes=4
+      - -c
+      - max_parallel_workers=4
+      - -c
+      - max_parallel_workers_per_gather=2
+      - -c
+      - autovacuum_work_mem=64MB
+      - -c
+      - random_page_cost=1.1
+      - -c
+      - effective_io_concurrency=200
+      - -c
+      - max_locks_per_transaction=512
+      - -c
+      - checkpoint_timeout=15min
 
   rabbitmq:
     image: rabbitmq:3-management
     container_name: rabbitmq
     ports:
-      - "127.0.0.1:5672:5672"
-      - "127.0.0.1:15672:15672"
+      - "127.0.0.1:6672:5672"
+      - "127.0.0.1:25672:15672"
     environment:
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest
-    networks:
-      - estimador_inteligente
 
   redis:
-    image: redis:7
+    image: redis
     container_name: redis
     ports:
-      - "127.0.0.1:6379:6379"
-    networks:
-      - estimador_inteligente
-
-  volumes:
-    postgres_data:
-
-  networks:
-    estimador_inteligente:
-      driver: bridge
+      - "127.0.0.1:7379:6379"
+    volumes:
+      - ./cache:/data
