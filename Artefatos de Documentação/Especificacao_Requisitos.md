@@ -46,9 +46,9 @@ Este Documento de Especificação de Requisitos (ERS) descreve de forma completa
 - Auditores e avaliadores externos
 
 ### Convenções e Definições
-- [RF-XXX] – Identificador de Requisito Funcional
-- [RNF-XXX] – Identificador de Requisito Não-Funcional
-- [RN-XXX] – Identificador de Regra de Negócio
+- [RFXXX] – Identificador de Requisito Funcional
+- [RNFXXX] – Identificador de Requisito Não-Funcional
+- [RNXXX] – Identificador de Regra de Negócio
 - Prioridade: Alta / Média / Baixa
 
 ## Partes Interessadas (Stakeholders)
@@ -78,37 +78,38 @@ O sistema NÃO incluí (fora do escopo inicialmente):
 
 |ID|Descrição|Prioridade|
 |---|---|---|
-|RF-001|O sistema deve permitir que o utilizador realize login utilizando e-mail e senha|Alta|
-|RF-002|O sistema deve suportar autenticação de dois fatores (2FA) via e-mail cadastrado|Alta|
-|RF-003|O sistema deve exibir menagem de erro clara após três tentativas de login mal sucedidas e bloquear a conta temporariamente.|Média|
-|RF-004|O sistema deve permitir recuperação de senha por e-mail|Alta|
-|RF-005|O administrador deve suportar 3 perfis de acesso a saber: administrador, operador e utilizador|Alta|
-|RF-006|O perfil administrador deve poder cadastrar, editar e excluir contas de usuário|Alta|
-|RF-007|O perfil administrador deve poder apenas visualizar todos artefatos que compõe o sistema, incluindo os logs de operação, mas não poderá alterá-los, exceto com relação às contas de usuário.|Alta|
-|RF-008|O perfil operador deve poder excluir modelos, alterar parâmetros de execução e quaisquer outros artefatos que afetem a operação do sistema, exceto acesso aos logs de operação.|Alta|
-|RF-009|O perfil utilizador se limitará ao uso do modelo de predição e atualização de dados para treino de modelo.|Alta|
-|RF-010|O sistema deve registar log de todas as ações realizadas para fins de auditoria.|Alta|
-|RF-011|O sistema deve gerar relatório de acesso filtrados por data, usuário e tipo de operação.|Alta|
-|RF-012|O sistema frontend deverá registrar os produtos de interesse de cada utilizador no banco de dados do sistema.|Alta|
-|RF-013|O sistema frontend deverá receber e armazenar os dados de treino de um utilizador no banco de dados do sistema.|Alta|
-|RF-014|O sistema armazenará apenas um conjunto de dados de treino por utilizador (o último enviado) onde os dados serão sempre referentes a diversos produtos.|Média|
-|RF-015|Após o armazenamento de um novo conjunto de dados para um utilizador, o frontend deverá informar o serviço de treinamento de modelo, via messageria.|Alta|
-|RF-016|O serviço de mineração de dados e treino de modelos deverá treinar um modelo por produto/utilizador e armazenar o resultado do treino no banco de dados do sistema.|Alta|
-|RF-017|O serviço de mineração de dados e treino de modelos deverá aguardar pelo id do utlizador em uma fila de messageria.|Alta|
+|RF001|O sistema deve permitir que o utilizador realize login utilizando e-mail e senha|Alta|
+|RF002|O sistema deve suportar autenticação de dois fatores (2FA) via e-mail cadastrado|Alta|
+|RF003|O sistema deve exibir menagem de erro clara após três tentativas de login mal sucedidas e bloquear a conta temporariamente.|Média|
+|RF004|O sistema deve permitir recuperação de senha por e-mail|Alta|
+|RF005|O administrador deve suportar 3 perfis de acesso a saber: administrador, operador e utilizador|Alta|
+|RF006|O perfil administrador deve poder cadastrar, editar e excluir contas de usuário|Alta|
+|RF007|O perfil administrador deve poder apenas visualizar todos artefatos que compõe o sistema, incluindo os logs de operação, mas não poderá alterá-los, exceto com relação às contas de usuário.|Alta|
+|RF008|O perfil operador deve poder excluir modelos, alterar parâmetros de execução e quaisquer outros artefatos que afetem a operação do sistema, exceto acesso aos logs de operação.|Alta|
+|RF009|O perfil utilizador se limitará ao uso do modelo de predição e atualização de dados para treino de modelo.|Alta|
+|RF010|O sistema deve registar log de todas as ações realizadas para fins de auditoria.|Alta|
+|RF011|O sistema deve gerar relatório de acesso filtrados por data, usuário e tipo de operação.|Alta|
+|RF012|O sistema frontend deverá registrar os produtos de interesse de cada utilizador no banco de dados do sistema.|Alta|
+|RF013|O sistema frontend deverá receber e armazenar os dados de treino de um utilizador no banco de dados do sistema.|Alta|
+|RF014|O sistema armazenará apenas um conjunto de dados de treino por utilizador (o último enviado) onde os dados serão sempre referentes a diversos produtos.|Média|
+|RF015|Após o armazenamento de um novo conjunto de dados para um utilizador, o frontend deverá informar o serviço de treinamento de modelo, via messageria.|Alta|
+|RF016|O serviço de mineração de dados e treino de modelos deverá treinar um modelo por produto/utilizador e armazenar o resultado do treino no banco de dados do sistema.|Alta|
+|RF017|O serviço de mineração de dados e treino de modelos deverá aguardar pelo id do utlizador em uma fila de messageria.|Alta|
 
 ## Requisitos Não-Funcionais
 
 |ID|Descrição|Prioridade|
 |--|--|--|
-|RNF-001|O sistema deve responder a requisições de consulta em até 2 segundos para 95% das solicitações.|Alta|
-|RNF-002|O sistema deve ser capaz de processar pelo menos 1.000 transações por minuto.|Alta|
-|RNF-003|O sistema deve estar disponível 99,5% do tempo (uptime), excetuando janelas de manutenção programada.|Alta|
-|RNF-004|O serviço de mineração e treino de modelos deverá operar em regime de alta disponibilidade.|Alta|
-|RNF-005|Backups automáticos do banco de dados devem ser realizados diariamente com retenção mínima de 30 dias e transmitidos para outra localidade.|Alta|
-|RNF-006|Todos os dados em trânsito fora da composição dos containers de um serviço devem ser criptografados|Alta|
-|RNF-007|O sistema deve estar em conformidade com a Lei Geral de Proteção de Dados (LGPD – Lei 13.709/2018)|Alta|
-|RNF-008|O sistema deve implementar proteção contra ataques CSRF, XSS e SQL Injection.|Alta|
-|RNF-009|A interface deve ser responsiva, adaptando-se a dispositivos móveis, tablets e desktops.|Alta|
-|RNF-010|O tempo de aprendizado para usuários novos deve ser de até 2 horas com o material de treinamento fornecido.|Alta|
-|RNF-011|O sistema deve possuir cobertura mínima de 80% de testes automatizados (unitários e integração).|Alta|
-|RNF-012|O sistema deve ser compatível com os principais navegadores modernos: Chrome, Firefox, Edge e Safari.|Média|
+|RNF001|O sistema deve responder a requisições de consulta em até 2 segndos para 95% das solicitações.|Alta|
+|RNF002|O sistema deve ser capaz de processar pelo menos 1.000 trasações por minuto.|Alta|
+|RNF003|O sistema deve estar disponível 99,5% do tempo (uptime), exctuando janelas de manutenção programada.|Alta|
+|RNF004|O serviço de mineração e treino de modelos deverá operar em regme de alta disponibilidade.|Alta|
+|RNF005|Backups automáticos do banco de dados devem ser realizados diaiamente com retenção mínima de 30 dias e transmitidos para outra localidade.|Alta|
+|RNF006|Todos os dados em trânsito fora da composição dos containers de um erviço devem ser criptografados|Alta|
+|RNF007|O sistema deve estar em conformidade com a Lei Geral de Proeção de Dados (LGPD – Lei 13.709/2018)|Alta|
+|RNF008|O sistema deve implementar proteção contra ataques CSRF, XSS e SQLInjection.|Alta|
+|RNF009|A interface deve ser responsiva, adaptando-se a dispositivos móvis, tablets e desktops.|Alta|
+|RNF010|O tempo de aprendizado para usuários novos deve ser de até 2 hors com o material de treinamento fornecido.|Alta|
+|RNF011|O sistema deve possuir cobertura mínima de 80% de testes autmatizados (unitários e integração).|Alta|
+|RNF012|O sistema deve ser compatível com os principais navegadores modrnos: Chrome, Firefox, Edge e Safari.|Média|
+
