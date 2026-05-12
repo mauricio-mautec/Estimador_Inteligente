@@ -40,7 +40,7 @@ Prediz produção a partir de séries temporais
 - NumPy
 - Postgresql
 
-## GRUPO CHARLIE - Back-end
+## GRUPO CHARLIE - Agente de IA e interface Telegram
 - 1 Guilherme Henrique Alves da Costa
 - 2 Giovanna Minelli Pereira Bonifácio 
 - 3 Gabriel Maranhão Araújo Correia
