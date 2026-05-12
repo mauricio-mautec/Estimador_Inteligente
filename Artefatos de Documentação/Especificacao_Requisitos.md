@@ -77,6 +77,7 @@ O sistema NÃO incluí (fora do escopo inicialmente):
 ## Requisitos Funcionais
 
 |ID|Descrição|Prioridade|
+|---|---|---|
 |RF-001|O sistema deve permitir que o utilizador realize login utilizando e-mail e senha|Alta|
 |RF-002|O sistema deve suportar autenticação de dois fatores (2FA) via e-mail cadastrado|Alta|
 |RF-003|O sistema deve exibir menagem de erro clara após três tentativas de login mal sucedidas e bloquear a conta temporariamente.|Média|
