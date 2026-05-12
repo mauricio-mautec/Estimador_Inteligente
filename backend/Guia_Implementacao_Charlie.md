@@ -5,6 +5,7 @@ Este guia detalha o "Como Fazer" técnico passo a passo para a arquitetura de re
 ---
 
 ## 1. Estrutura Base do Diretório `backend/`
+
 Organização de pastas limpa e orientada a microsserviços.
 
 ```text
@@ -41,8 +42,8 @@ asyncpg               # Driver PostgreSQL assíncrono (Alta performance RNF001)
 pydantic
 PyJWT                 # Para validar os tokens de login do Grupo Alfa
 # Bibliotecas a definir em conjunto com o Grupo Bravo para o LSTM:
-torch                 
-pandas                
+torch             
+pandas          
 ```
 
 O `Dockerfile` garante padronização:
@@ -60,9 +61,11 @@ CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8000"]
 ---
 
 ## 3. A API REST (Fase 2)
+
 A base do sistema é nosso FastAPI, que servirá predições para o Next.js (Grupo Alfa).
 
 **`src/api/routers.py`**
+
 ```python
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
@@ -94,9 +97,11 @@ async def predict_endpoint(req: SolicitacaoPrevisao, current_user = Depends(vali
 ---
 
 ## 4. Carga e Processamento do Modelo LSTM (Elo com o Grupo Bravo)
+
 O diagrama aponta que a predição acontece aqui. O Grupo Bravo treina e joga no Banco de Dados. Nós (Charlie) pegamos no Banco de Dados e executamos.
 
 **`src/model_loader/predictor.py`**
+
 ```python
 import torch
 from src.database.db import get_connection
@@ -113,10 +118,10 @@ async def carregar_modelo_lstm_do_banco(user_id: int, id_produto: int):
 
 async def fazer_predicao(user_id: int, id_produto: int, serie_temporal: list[float]) -> float:
     modelo = await carregar_modelo_lstm_do_banco(user_id, id_produto)
-    
+  
     # Processa os dados de entrada no formato esperado pelo LSTM
     tensor_entrada = torch.tensor([serie_temporal])
-    
+  
     # Executa a inferência
     predicao = modelo(tensor_entrada)
     return round(float(predicao[0]), 2)
@@ -125,9 +130,11 @@ async def fazer_predicao(user_id: int, id_produto: int, serie_temporal: list[flo
 ---
 
 ## 5. Desenvolvimento do Agente de IA com Agno (Fase 3)
+
 A cereja do bolo. Em vez de comandos fixos no Telegram (como `/prever`), o Agno entende conversa humana.
 
 **`src/agent/assistant.py`**
+
 ```python
 from agno.agent import Agent
 from agno.tools import tool
@@ -160,9 +167,11 @@ agente_padaria = Agent(
 ---
 
 ## 6. A "Mágica" do Vínculo Telegram e AgentOS (Fase 4)
+
 Aqui resolvemos a questão da autenticação: conectamos o Bot do Telegram e expomos nossa API, tudo junto.
 
 **`src/main.py`**
+
 ```python
 from fastapi import FastAPI
 from agno.os import AgentOS
@@ -201,8 +210,9 @@ Para evitar que "qualquer um" converse com o bot:
 ```
 
 ### Resumo do Fluxo Operacional:
+
 1. **O Grupo Alfa** manda requisições para `POST /api/v1/predict` passando o token JWT deles. Nosso `auth.py` checa o JWT, e o router roda o `fazer_predicao`.
 2. **O Cliente no Telegram** diz: *"Meus últimos 3 dias foram 100, 105, 110 pães. Quanto faço hoje?"*.
-3. O **Agno** recebe a mensagem, entende que precisa usar a `@tool consultar_estimativa`. 
+3. O **Agno** recebe a mensagem, entende que precisa usar a `@tool consultar_estimativa`.
 4. A *tool* pega os dados, roda o mesmo `fazer_predicao` buscando o modelo do banco.
 5. O **Agno** formula uma resposta simpática: *"Baseado nos dados que você me passou, o cálculo matemático ideal para hoje é de 115 pães. Bom trabalho!"*
