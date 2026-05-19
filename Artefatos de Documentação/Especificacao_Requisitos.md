@@ -20,6 +20,7 @@ Goiânia, 11 de Maio de 2026
 |Versão|Data|Descrição|Autor|
 |--|--|--|--|
 |v1.1|11/05/26|Versão inicial do documento|MJ|
+|v1.2|18/05/26|Atualização dos requisitos e correções|MJ|
 
 ## SUMÁRIO
 Este documento está organizado nas seguintes seções principais:
@@ -80,7 +81,7 @@ O sistema NÃO incluí (fora do escopo inicialmente):
 |---|---|---|
 |RF001|O sistema deve permitir que o utilizador realize login utilizando e-mail e senha|Alta|
 |RF002|O sistema deve suportar autenticação de dois fatores (2FA) via e-mail cadastrado|Alta|
-|RF003|O sistema deve exibir menagem de erro clara após três tentativas de login mal sucedidas e bloquear a conta temporariamente.|Média|
+|RF003|O sistema deve exibir mensagem de erro clara após três tentativas de login mal sucedidas e bloquear a conta temporariamente.|Média|
 |RF004|O sistema deve permitir recuperação de senha por e-mail|Alta|
 |RF005|O administrador deve suportar 3 perfis de acesso a saber: administrador, operador e utilizador|Alta|
 |RF006|O perfil administrador deve poder cadastrar, editar e excluir contas de usuário|Alta|
@@ -95,6 +96,14 @@ O sistema NÃO incluí (fora do escopo inicialmente):
 |RF015|Após o armazenamento de um novo conjunto de dados para um utilizador, o frontend deverá informar o serviço de treinamento de modelo, via messageria.|Alta|
 |RF016|O serviço de mineração de dados e treino de modelos deverá treinar um modelo por produto/utilizador e armazenar o resultado do treino no banco de dados do sistema.|Alta|
 |RF017|O serviço de mineração de dados e treino de modelos deverá aguardar pelo id do utlizador em uma fila de messageria.|Alta|
+|RF018|O serviço de Agente de IA, quando acessado pelo Telegram, deverá solicitar identificação do usuário e senha e proceder com autenticação 2FA colhendo código por e-mail.|Alta|
+|RF019|O serviço de Agente de IA deverá guardar o histórico de conversação do usuário por pelo menos 5 minutos.|Média|
+|RF020|O serviço de Agente de IA, quando acessado pelo Telegram, após autenticação 2FA, deverá apresentar um card com todos os produtos cadastrados deste usuário e aguardar pela seleção de um produto para predição.|Alta|
+|RF021|O serviço de Agente de IA, quando acessado pelo Telegram, e após a seleção de um produto para predição, deverá coletar o valor da produção atual.
+|RF022|O serviço de Agente de IA, quando acessado pelo Telegram, e após a seleção de um produto para predição, e coletado o valor da produção atual, deverá acionar o serviço de predição de modelo, enviando os dados coletados, e devolver o valor predito. 
+|RF023|O serviço de Agente de IA, quando acessado via fila (Queue/messageria), deverá acionar o serviço de predição de modelo, enviando os dados coletados pelo frontend e acionando o serviço de predição de modelo via RPC, e devolver o valor predito. 
+
+
 
 ## Requisitos Não-Funcionais
 
@@ -102,14 +111,14 @@ O sistema NÃO incluí (fora do escopo inicialmente):
 |--|--|--|
 |RNF001|O sistema deve responder a requisições de consulta em até 2 segndos para 95% das solicitações.|Alta|
 |RNF002|O sistema deve ser capaz de processar pelo menos 1.000 trasações por minuto.|Alta|
-|RNF003|O sistema deve estar disponível 99,5% do tempo (uptime), exctuando janelas de manutenção programada.|Alta|
-|RNF004|O serviço de mineração e treino de modelos deverá operar em regme de alta disponibilidade.|Alta|
-|RNF005|Backups automáticos do banco de dados devem ser realizados diaiamente com retenção mínima de 30 dias e transmitidos para outra localidade.|Alta|
-|RNF006|Todos os dados em trânsito fora da composição dos containers de um erviço devem ser criptografados|Alta|
-|RNF007|O sistema deve estar em conformidade com a Lei Geral de Proeção de Dados (LGPD – Lei 13.709/2018)|Alta|
+|RNF003|O sistema deve estar disponível 99,5% do tempo (uptime), excetuando janelas de manutenção programada.|Alta|
+|RNF004|O serviço de mineração e treino de modelos deverá operar em regime de alta disponibilidade.|Alta|
+|RNF005|Backups automáticos do banco de dados devem ser realizados diariamente com retenção mínima de 30 dias e transmitidos para outra localidade.|Alta|
+|RNF006|Todos os dados em trânsito fora da composição dos containers de um serviço devem ser criptografados|Alta|
+|RNF007|O sistema deve estar em conformidade com a Lei Geral de Proteção de Dados (LGPD – Lei 13.709/2018)|Alta|
 |RNF008|O sistema deve implementar proteção contra ataques CSRF, XSS e SQLInjection.|Alta|
-|RNF009|A interface deve ser responsiva, adaptando-se a dispositivos móvis, tablets e desktops.|Alta|
-|RNF010|O tempo de aprendizado para usuários novos deve ser de até 2 hors com o material de treinamento fornecido.|Alta|
-|RNF011|O sistema deve possuir cobertura mínima de 80% de testes autmatizados (unitários e integração).|Alta|
-|RNF012|O sistema deve ser compatível com os principais navegadores modrnos: Chrome, Firefox, Edge e Safari.|Média|
+|RNF009|A interface deve ser responsiva, adaptando-se a dispositivos móveis, tablets e desktops.|Alta|
+|RNF010|O tempo de aprendizado para usuários novos deve ser de até 2 horas com o material de treinamento fornecido.|Alta|
+|RNF011|O sistema deve possuir cobertura mínima de 80% de testes automatizados (unitários e integração).|Alta|
+|RNF012|O sistema deve ser compatível com os principais navegadores modernos: Chrome, Firefox, Edge e Safari.|Média|
 
