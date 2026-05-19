@@ -99,9 +99,9 @@ O sistema NÃO incluí (fora do escopo inicialmente):
 |RF018|O serviço de Agente de IA, quando acessado pelo Telegram, deverá solicitar identificação do usuário e senha e proceder com autenticação 2FA colhendo código por e-mail.|Alta|
 |RF019|O serviço de Agente de IA deverá guardar o histórico de conversação do usuário por pelo menos 5 minutos.|Média|
 |RF020|O serviço de Agente de IA, quando acessado pelo Telegram, após autenticação 2FA, deverá apresentar um card com todos os produtos cadastrados deste usuário e aguardar pela seleção de um produto para predição.|Alta|
-|RF021|O serviço de Agente de IA, quando acessado pelo Telegram, e após a seleção de um produto para predição, deverá coletar o valor da produção atual.
-|RF022|O serviço de Agente de IA, quando acessado pelo Telegram, e após a seleção de um produto para predição, e coletado o valor da produção atual, deverá acionar o serviço de predição de modelo, enviando os dados coletados, e devolver o valor predito. 
-|RF023|O serviço de Agente de IA, quando acessado via fila (Queue/messageria), deverá acionar o serviço de predição de modelo, enviando os dados coletados pelo frontend e acionando o serviço de predição de modelo via RPC, e devolver o valor predito. 
+|RF021|O serviço de Agente de IA, quando acessado pelo Telegram, e após a seleção de um produto para predição, deverá coletar o valor da produção atual.|Alta|
+|RF022|O serviço de Agente de IA, quando acessado pelo Telegram, e após a seleção de um produto para predição, e coletado o valor da produção atual, deverá acionar o serviço de predição de modelo, enviando os dados coletados, e devolver o valor predito. |Alta|
+|RF023|O serviço de Agente de IA, quando acessado via fila (Queue/messageria), deverá acionar o serviço de predição de modelo, enviando os dados coletados pelo frontend e acionando o serviço de predição de modelo via RPC, e devolver o valor predito.|Alta|
 
 
 
