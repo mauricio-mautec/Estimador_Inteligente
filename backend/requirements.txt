@@ -1,10 +1,11 @@
+--extra-index-url https://download.pytorch.org/whl/cpu
 fastapi
 uvicorn
-agno[os]
+agno[telegram]
 openai
+google-genai
 asyncpg
 pydantic
 PyJWT
 pandas
---extra-index-url https://download.pytorch.org/whl/cpu
 torch

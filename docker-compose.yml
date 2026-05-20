@@ -5,6 +5,7 @@ services:
     environment:
       POSTGRES_PASSWORD: GXMLkQLSAaoTkjod
       POSTGRES_USER: estimador
+      PGDATA: /var/lib/postgresql/data/pgdata
       TZ: America/Sao_Paulo
     volumes:
       - ./database:/var/lib/postgresql/data
@@ -68,3 +69,22 @@ services:
       - "127.0.0.1:7379:6379"
     volumes:
       - ./cache:/data
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: estimador_backend_charlie
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend/src:/app/src
+    depends_on:
+      - postgres
+      - rabbitmq
+      - redis
+    env_file:
+      - ./backend/.env
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://estimador:GXMLkQLSAaoTkjod@postgres:5432/estimador
+      - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672/
