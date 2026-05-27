@@ -68,3 +68,12 @@ services:
       - "127.0.0.1:7379:6379"
     volumes:
       - ./cache:/data
+
+  modelo:
+    build: ./modelo
+    environment:
+      AMQP_URL: amqp://guest:guest@rabbitmq:5672/
+      DB_DSN: postgresql://estimador:GXMLkQLSAaoTkjod@postgres:5432/estimador
+    depends_on:
+      - rabbitmq
+      - postgres
