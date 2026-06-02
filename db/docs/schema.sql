@@ -21,7 +21,7 @@ CREATE TYPE nivel_acesso AS ENUM (
     'ADM'   -- Administrador
 );
 
-CREATE TYPE tipo_modelo as ENUM (
+CREATE TYPE tipo_modelo AS ENUM (
     'ARM',  -- ARIMA
     'RLN',  -- Regressão Linear
     'ARD',  -- Árvore de Decisão
