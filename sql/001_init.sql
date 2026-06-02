@@ -21,7 +21,7 @@ CREATE TYPE nivel_acesso AS ENUM (
     'ADM'   -- Administrador
 );
 
-CREATE TYPE tipo_modelo AS ENUM (
+CREATE TYPE tipo_modelo as ENUM (
     'ARM',  -- ARIMA
     'RLN',  -- Regressão Linear
     'ARD',  -- Árvore de Decisão
@@ -49,7 +49,7 @@ CREATE TABLE usuario (
     ativo         BOOLEAN       NOT NULL DEFAULT TRUE,
     criado_em     TIMESTAMPTZ   NOT NULL DEFAULT NOW(),
     atualizado_em TIMESTAMPTZ   NOT NULL DEFAULT NOW(),
-    e_delete      BOOLEAN       NOT NULL DEFAULT FALSE,
+    e_delete      BOOLEAN       NOT NULL DEFAULT FALSE
 );
 
 CREATE INDEX idx_usuario_email ON usuario (email);
@@ -66,8 +66,7 @@ CREATE TABLE modelo (
     tipo            tipo_modelo NOT NULL,
     payload_schema  JSONB       NOT NULL DEFAULT '{}',
     criado_em       TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    atualizado_em   TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    UNIQUE (tipo)
+    atualizado_em   TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
 CREATE INDEX idx_modelo_tipo ON modelo (tipo);
