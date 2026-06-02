@@ -10,17 +10,15 @@ logger = logging.getLogger(__name__)
 
 
 class TrainingRequest(BaseModel):
-    solicitante_id: int
-    nome_modelo: str
-    #produto_treino: list[str]
-    tipo_treino: str
+    modelo_id: int
+    usuario_id: str
+    payload: str
     tabela: str
     # mapeia funções semânticas para nomes de colunas reais:
     # {"produto": "col_x", "data": "col_y", "quantidade_manha": "col_a",
     #  "quantidade_tarde": "col_b", "total": "col_c"}
     colunas: dict[str, str]
     periodos_previsao: int = 3
-    #turno: str | None = None  # "MANHA" | "TARDE" | None (usa total)
 
 
 class AMQPConfig(BaseModel):
@@ -52,9 +50,9 @@ class AMQPConsumer:
             try:
                 request = TrainingRequest.model_validate_json(body)
                 logger.info(
-                    "Request received: cliente=%s produto=%s",
-                    request.cliente,
-                    request.produto_previsao,
+                    "Request received: modelo_id=%s usuario_id=%s",
+                    request.modelo_id,
+                    request.usuario_id,
                 )
                 handler(request)
                 ch.basic_ack(delivery_tag=method.delivery_tag)

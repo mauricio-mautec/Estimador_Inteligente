@@ -69,8 +69,19 @@ services:
     volumes:
       - ./cache:/data
 
+  #backend:
+  #  build:
+  #    context: .
+  #    dockerfile: backend/Dockerfile
+  #  ports:
+  #    - "127.0.0.1:8000:8000"
+  #  depends_on:
+  #    - postgres
+
   modelo:
-    build: ./modelo
+    build:
+      context: .
+      dockerfile: modelo/Dockerfile
     environment:
       AMQP_URL: amqp://guest:guest@rabbitmq:5672/
       DB_DSN: postgresql://estimador:GXMLkQLSAaoTkjod@postgres:5432/estimador

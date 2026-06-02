@@ -1,8 +1,8 @@
 import logging
 import os
 
-from models.cloudAMQP import AMQPConfig, AMQPConsumer, TrainingRequest
-from models.model import DatabaseModel
+from db.connection import DatabaseConnection
+from messaging.cloudamqp import AMQPConfig, AMQPConsumer, TrainingRequest
 
 logging.basicConfig(
     level=logging.INFO,
@@ -16,18 +16,18 @@ AMQP_QUEUE = os.environ.get("AMQP_QUEUE", "modelo.treino")
 
 
 def handle_request(request: TrainingRequest) -> None:
-    db = DatabaseModel(dsn=DB_DSN)
+    db = DatabaseConnection(dsn=DB_DSN)
     try:
         db.connect()
-        df = db.fetch_product_history(
+        df = db.tabela_dinamica.fetch_product_history(
             tabela=request.tabela,
             colunas=request.colunas,
             produtos=request.produto_treino,
         )
         logger.info(
-            "Buscado %d linhas para cliente=%s tabela=%s",
+            "Buscado %d linhas para modelo_id=%s tabela=%s",
             len(df),
-            request.cliente,
+            request.modelo_id,
             request.tabela,
         )
         # TODO: treinar modelo e entregar o resultado da previsão

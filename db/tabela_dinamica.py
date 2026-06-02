@@ -8,8 +8,8 @@ import psycopg2.extras
 logger = logging.getLogger(__name__)
 
 
-class DatabaseModel:
-    """Camada de acesso PostgreSQL.
+class TabelaDinamica:
+    """Acesso às tabelas de dados históricos do cliente (schema dinâmico).
 
     Chaves de mapeamento de coluna (colunas dict):
         produto          - coluna de nome do produto
@@ -19,17 +19,8 @@ class DatabaseModel:
         total            - coluna de quantidade total
     """
 
-    def __init__(self, dsn: str):
-        self._dsn = dsn
-        self._conn: psycopg2.extensions.connection | None = None
-
-    def connect(self) -> None:
-        self._conn = psycopg2.connect(self._dsn)
-        logger.info("Connected to PostgreSQL")
-
-    def close(self) -> None:
-        if self._conn and not self._conn.closed:
-            self._conn.close()
+    def __init__(self, conn: psycopg2.extensions.connection) -> None:
+        self._conn = conn
 
     @contextmanager
     def _cursor(self):
@@ -44,8 +35,8 @@ class DatabaseModel:
     ) -> pd.DataFrame:
         """Buscar o histórico de séries temporais para os produtos fornecidos.
 
-        Retorna um DataFrame com colunas normalizadas para:
-        data, produto, quantidade_manha, quantidade_tarde, total
+        Retorna DataFrame com colunas normalizadas:
+        data, produto, quantidade_manha, quantidade_tarde, total.
         """
         col_produto = colunas["produto"]
         col_data = colunas["data"]
@@ -89,7 +80,7 @@ class DatabaseModel:
         return df
 
     def fetch_all_products(self, tabela: str, colunas: dict[str, str]) -> list[str]:
-        """Return distinct product names from the table."""
+        """Retorna lista distinta de nomes de produto da tabela."""
         col_produto = colunas["produto"]
         query = f'SELECT DISTINCT "{col_produto}" FROM "{tabela}" ORDER BY 1'
         with self._cursor() as cur:
