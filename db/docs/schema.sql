@@ -63,11 +63,11 @@ CREATE INDEX idx_usuario_email ON usuario (email);
 
 CREATE TABLE modelo (
     modelo_id       UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    nome            NOT NULL,
     tipo            tipo_modelo NOT NULL,
     payload_schema  JSONB       NOT NULL DEFAULT '{}',
     criado_em       TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    atualizado_em   TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    UNIQUE (tipo)
+    atualizado_em   TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
 CREATE INDEX idx_modelo_tipo ON modelo (tipo);
