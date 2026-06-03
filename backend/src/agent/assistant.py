@@ -76,9 +76,10 @@ async def efetuar_login_usuario(email: str, senha: str, run_context: RunContext)
 @tool
 async def listar_modelos_do_usuario(run_context: RunContext) -> str:
     """
-    Lista os modelos aos quais o usuário logado tem acesso.
-    Garante que só liste se a sessão existir. Se existir, puxa o mock de modelos ativos (no db.py)
-    e os retorna formatados para que a IA os ofereça como opções de botão no chat.
+    Lista os modelos treinados e concluídos aos quais o usuário logado tem acesso.
+    Garante que só liste se a sessão existir. Se existir, busca na tabela 'modelo_treinado'
+    do Postgres os treinos concluídos com sucesso (CCD).
+    Retorna formatados para que a IA os ofereça como opções de escolha.
     """
     from src.session.session_manager import obter_sessao
     from src.database.db import listar_modelos_ativos
@@ -90,33 +91,40 @@ async def listar_modelos_do_usuario(run_context: RunContext) -> str:
     
     modelos = await listar_modelos_ativos(sessao['id_cadastro'])
     if not modelos:
-        return "Nenhum modelo válido encontrado para este usuário."
+        return "Nenhum modelo treinado e concluído foi encontrado para este usuário."
     
-    # Formata a resposta para a IA entender e repassar ao usuário
-    resposta = "Modelos disponíveis:\n"
+    resposta = "Modelos/Treinamentos disponíveis:\n"
     for m in modelos:
-        resposta += f"- ID: {m['id_modelo']} | Nome: {m['nome_modelo']}\n"
-        resposta += f"  Parâmetros exigidos: {m.get('configuracao', 'Nenhum')}\n"
+        resposta += f"- ID: {m['id_modelo']} | Algoritmo: {m['nome_modelo']}\n"
+        resposta += f"  Parâmetros originais do treino: {m.get('configuracao', 'Nenhum')}\n"
     
     return resposta
 
 @tool
-async def consultar_estimativa(id_modelo: int, parametros_preenchidos: str, run_context: RunContext) -> str:
+async def consultar_estimativa(id_modelo: str, run_context: RunContext) -> str:
     """
-    Usa os parâmetros coletados inteligentemente pelo agente para fazer a predição real/simulada.
-    Neste momento (fase de mock), repassa os dados para o predictor que executará o cálculo substituto, 
-    uma vez que não há modelo treinado de verdade ainda.
+    Busca o resultado das previsões pré-calculadas pelo Grupo Bravo para o modelo treinado selecionado.
+    O parâmetro `id_modelo` é o UUID do modelo treinado selecionado.
+    Retorna os resultados de estimativa formatados.
     """
     from src.session.session_manager import obter_sessao
-    from src.model_loader.predictor import fazer_predicao
+    from src.database.db import obter_resultado_previsao
     
     chat_id = run_context.session_id
     sessao = await obter_sessao(chat_id)
     if not sessao:
         return "Erro: O usuário não está logado."
     
-    # O mock fará uma simulação simples da predição baseada nos parâmetros (dias anteriores, etc)
-    return f"O modelo ID {id_modelo} processou os dados '{parametros_preenchidos}'. A predição simulada para a demanda é de 150 unidades hoje."
+    resultado = await obter_resultado_previsao(id_modelo)
+    if not resultado:
+        return f"Não foi possível encontrar previsões ou resultados prontos para o modelo ID {id_modelo}."
+    
+    # Formata a predição para exibir amigavelmente ao usuário
+    resposta = f"Previsão de demanda calculada com sucesso para o modelo ID {id_modelo}:\n"
+    for periodo, valor in resultado.items():
+        resposta += f"- Período/Data: {periodo} | Estimativa: {valor} unidades\n"
+    
+    return resposta
 
 # ── Configuração do Agente ──
 
@@ -133,12 +141,9 @@ instrucoes_bot = (
     "4. Assim que você receber a senha, use a ferramenta 'efetuar_login_usuario' passando o e-mail e a senha que o cliente informou.\n"
     "5. Se o login falhar, informe educadamente o erro ao usuário e recomece solicitando o e-mail novamente.\n"
     "6. Se o login for bem-sucedido (ou se a verificação inicial indicar que ele já logou), "
-    "use imediatamente a ferramenta 'listar_modelos_do_usuario' para mostrar na tela os modelos que ele pode rodar.\n"
-    "7. Quando o usuário escolher um modelo (pelo nome ou ID), analise cuidadosamente quais parâmetros são exigidos na configuração daquele modelo.\n"
-    "8. Faça as perguntas para cada parâmetro exigido de maneira sequencial (uma a uma), validando o tipo (ex: int, float) "
-    "antes de prosseguir para a próxima pergunta.\n"
-    "9. Após receber todas as respostas de parâmetros necessárias, use a ferramenta 'consultar_estimativa' "
-    "para obter a predição final e apresente esse resultado ao cliente com clareza."
+    "use imediatamente a ferramenta 'listar_modelos_do_usuario' para mostrar os modelos treinados disponíveis para ele.\n"
+    "7. Quando o usuário escolher um modelo treinado (pelo ID ou opção), use a ferramenta 'consultar_estimativa' "
+    "passando o ID correspondente para buscar os resultados calculados e apresente esse resultado ao cliente com clareza em formato legível."
 )
 
 # Configuração de persistência de memória do Agno
