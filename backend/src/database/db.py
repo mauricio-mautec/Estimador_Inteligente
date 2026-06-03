@@ -39,68 +39,83 @@ async def get_pool() -> asyncpg.Pool:
 async def obter_usuario_por_credenciais(email: str, senha: str) -> Optional[Dict]:
     """
     Busca um usuário no banco de dados validando e-mail e senha.
-    Agora realiza um SELECT real na tabela 'cadastro' buscando o id, nome e role.
+    Realiza um SELECT real na tabela 'usuario' buscando o usuario_id, nome e papel (role).
     Retorna um dicionário com os dados do usuário ou None se não encontrado.
     """
     pool = await get_pool()
-    query = "SELECT id as id_cadastro, nome, role FROM cadastro WHERE email = $1 AND senha = $2"
+    query = """
+        SELECT usuario_id AS id_cadastro, nome, papel AS role 
+        FROM usuario 
+        WHERE email = $1 AND senha = $2 AND ativo = TRUE AND e_delete = FALSE
+    """
     try:
         async with pool.acquire() as conn:
             row = await conn.fetchrow(query, email, senha)
             if row:
-                return dict(row)
+                user_dict = dict(row)
+                # Converte o UUID para string para ser JSON/Redis serializável
+                if user_dict.get("id_cadastro"):
+                    user_dict["id_cadastro"] = str(user_dict["id_cadastro"])
+                return user_dict
     except Exception as e:
         print(f"Erro ao consultar credenciais do usuário: {e}")
     return None
 
-async def listar_modelos_ativos(cadastro_id: int) -> List[Dict]:
+async def listar_modelos_ativos(usuario_id: str) -> List[Dict]:
     """
-    Busca os modelos ativos vinculados a um cadastro_id específico.
-    Faz um INNER JOIN real entre as tabelas `modelo` e `cadastro_modelo`.
-    Também verifica se a data de validade (`validade >= CURRENT_TIMESTAMP`) não expirou.
-    A configuração do modelo é convertida de string JSONB para um dicionário Python.
+    Busca os modelos (treinamentos concluídos) vinculados ao usuario_id.
+    Retorna a lista de treinos concluídos com sucesso (status='CCD').
+    Mapeia os campos para manter compatibilidade com a assinatura esperada pelo Agente:
+    - id_modelo: UUID do modelo treinado (para identificar a estimativa específica)
+    - nome_modelo: tipo do modelo/algoritmo (ex: RNR, ARM)
+    - configuracao: payload de parâmetros do treino
     """
     pool = await get_pool()
     query = """
-        SELECT m.id_modelo, m.nome_modelo, m.configuracao, m.arquivo_modelo 
-        FROM modelo m 
-        INNER JOIN cadastro_modelo cm ON m.id_modelo = cm.modelo_id 
-        WHERE cm.cadastro_id = $1 AND cm.validade >= CURRENT_TIMESTAMP
+        SELECT mt.modelo_treinado_id AS id_modelo, m.tipo AS nome_modelo, mt.payload AS configuracao
+        FROM modelo_treinado mt
+        INNER JOIN modelo m ON mt.modelo_id = m.modelo_id
+        WHERE mt.usuario_id = $1::uuid AND mt.status = 'CCD'
+        ORDER BY mt.criado_em DESC
     """
     modelos = []
     try:
         async with pool.acquire() as conn:
-            rows = await conn.fetch(query, cadastro_id)
+            rows = await conn.fetch(query, usuario_id)
             for row in rows:
                 modelo_dict = dict(row)
+                # Garante que os campos UUID sejam convertidos em string
+                if modelo_dict.get("id_modelo"):
+                    modelo_dict["id_modelo"] = str(modelo_dict["id_modelo"])
                 if modelo_dict.get("configuracao"):
                     try:
-                        # Se já for dict, ignora, senão converte de string JSON para dict Python
                         if isinstance(modelo_dict["configuracao"], str):
                             modelo_dict["configuracao"] = json.loads(modelo_dict["configuracao"])
                     except json.JSONDecodeError:
                         pass
                 modelos.append(modelo_dict)
     except Exception as e:
-        print(f"Erro ao consultar modelos ativos no PostgreSQL: {e}")
+        print(f"Erro ao consultar modelos treinados no PostgreSQL: {e}")
     return modelos
 
-async def carregar_modelo_lstm_do_banco(cadastro_id: int, id_modelo: int) -> Optional[bytes]:
+async def obter_resultado_previsao(modelo_treinado_id: str) -> Optional[dict]:
     """
-    Retorna os bytes puros (BLOB/bytea) do arquivo `.h5` treinado pelo Grupo Bravo.
-    Verifica a permissão do usuário através do INNER JOIN com a tabela `cadastro_modelo`.
+    Retorna o JSON (dicionário) do resultado de previsão pré-calculado pelo Grupo Bravo
+    armazenado na coluna 'resultado' da tabela 'modelo_treinado'.
     """
     pool = await get_pool()
     query = """
-        SELECT m.arquivo_modelo 
-        FROM modelo m 
-        INNER JOIN cadastro_modelo cm ON m.id_modelo = cm.modelo_id 
-        WHERE cm.cadastro_id = $1 AND m.id_modelo = $2 AND cm.validade >= CURRENT_TIMESTAMP
+        SELECT resultado 
+        FROM modelo_treinado 
+        WHERE modelo_treinado_id = $1::uuid AND status = 'CCD'
     """
     try:
         async with pool.acquire() as conn:
-            val = await conn.fetchval(query, cadastro_id, id_modelo)
-            return val
+            val = await conn.fetchval(query, modelo_treinado_id)
+            if val:
+                if isinstance(val, str):
+                    return json.loads(val)
+                return val
     except Exception as e:
-        print(f"Erro ao buscar blob do arquivo do modelo: {e}")
+        print(f"Erro ao buscar resultado da predição no banco: {e}")
     return None

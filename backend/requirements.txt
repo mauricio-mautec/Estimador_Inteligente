@@ -1,7 +1,10 @@
 fastapi
 uvicorn
 agno[os]
+pyTelegramBotAPI
+aiohttp
 openai
+google-genai
 asyncpg
 pydantic
 PyJWT

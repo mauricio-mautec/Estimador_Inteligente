@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 
 
 class TrainingRequest(BaseModel):
-    modelo_id: int
+    modelo_id: str
     usuario_id: str
     payload: str
     tabela: str
