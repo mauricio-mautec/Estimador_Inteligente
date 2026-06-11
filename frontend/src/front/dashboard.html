@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard | Estimador IA</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="dashboard-layout">
+
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <div class="brand-mark">EI</div>
+            <div>
+                <strong>Estimador IA</strong>
+                <small>Produção inteligente</small>
+            </div>
+        </div>
+
+        <nav>
+            <a href="dashboard.html" class="active">Dashboard</a>
+            <a href="dados-treino.html">Enviar Dados</a>
+            <a href="resultado.html">Resultados</a>
+            <a href="modelos.html">Modelos</a>
+        </nav>
+
+        <button class="logout-btn" onclick="sair()">Sair</button>
+    </aside>
+
+    <main class="dashboard-main">
+
+        <header class="dashboard-header">
+            <div>
+                <span class="page-label">Painel operacional</span>
+                <h1>Olá, <span id="nomeUsuario">Usuário</span></h1>
+                <p id="textoDashboard">
+                    Acompanhe os envios de treino, previsões geradas e o status do processamento.
+                </p>
+            </div>
+
+            <div class="header-actions">
+                <a href="dados-treino.html" class="primary-action link-button">
+                    Enviar Dados
+                </a>
+
+                <a href="resultado.html" class="secondary-action">
+                    Solicitar Previsão
+                </a>
+            </div>
+        </header>
+
+        <section class="stats-grid">
+
+            <div class="stat-card">
+                <span class="card-icon">TRN</span>
+                <p>Envios de Treino</p>
+                <h2 id="totalEnvios">0</h2>
+            </div>
+
+            <div class="stat-card">
+                <span class="card-icon">PRD</span>
+                <p>Produto Monitorado</p>
+                <h2 id="produtoMonitorado">---</h2>
+            </div>
+
+            <div class="stat-card">
+                <span class="card-icon">STS</span>
+                <p>Status Treinamento</p>
+                <h2 id="statusTreinamento">---</h2>
+            </div>
+
+            <div class="stat-card">
+                <span class="card-icon">IA</span>
+                <p>Última Previsão</p>
+                <h2 id="ultimaPrevisao">---</h2>
+            </div>
+
+        </section>
+
+        <section class="table-card">
+
+            <div class="table-header">
+                <div>
+                    <h2>Atividades Recentes</h2>
+                    <p>Histórico dos últimos envios e previsões realizadas.</p>
+                </div>
+
+                <span class="table-badge">Atualização local</span>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tipo</th>
+                        <th>Produto</th>
+                        <th>Status</th>
+                        <th>Data</th>
+                    </tr>
+                </thead>
+
+                <tbody id="tabelaAtividades">
+                    <tr>
+                        <td colspan="4">Nenhuma atividade registrada.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </section>
+
+    </main>
+
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/dashboard.js"></script>
+
+</body>
+</html>

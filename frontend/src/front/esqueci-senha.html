@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recuperar Senha | Estimador IA</title>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="container">
+
+    <div class="left-panel">
+        <span class="page-label">Recuperação de acesso</span>
+
+        <h1>Esqueceu sua senha?</h1>
+
+        <p>
+            Informe o e-mail cadastrado para receber as instruções de recuperação de acesso.
+        </p>
+    </div>
+
+    <div class="login-card">
+
+        <h2>Recuperar senha</h2>
+
+        <p style="margin-bottom:20px;color:#64748b;">
+            Enviaremos um código de recuperação para o e-mail informado.
+        </p>
+
+        <input
+            type="email"
+            id="emailRecuperacao"
+            placeholder="Seu e-mail cadastrado"
+        >
+
+        <button onclick="recuperarSenha()">
+            Enviar instruções
+        </button>
+
+        <span id="erro"></span>
+
+        <div style="margin-top:20px;text-align:center;">
+            <a href="index.html" style="color:#2563eb;text-decoration:none;font-weight:700;">
+                Voltar para o login
+            </a>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+function recuperarSenha(){
+
+    const email =
+        document.getElementById("emailRecuperacao").value.trim();
+
+    const erro =
+        document.getElementById("erro");
+
+    erro.innerText = "";
+    erro.style.color = "#ef4444";
+
+    if(!email){
+        erro.innerText = "Informe seu e-mail.";
+        return;
+    }
+
+    const emailValido =
+        /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+    if(!emailValido){
+        erro.innerText = "Informe um e-mail válido.";
+        return;
+    }
+
+    erro.style.color = "#15803d";
+    erro.innerText =
+        "Instruções de recuperação enviadas para o e-mail informado.";
+}
+</script>
+
+</body>
+</html>

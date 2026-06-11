@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Resultado | Estimador IA</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="dashboard-layout">
+
+    <aside class="sidebar">
+        <div class="sidebar-logo">
+            <div class="brand-mark">EI</div>
+            <div>
+                <strong>Estimador IA</strong>
+                <small>Produção inteligente</small>
+            </div>
+        </div>
+
+        <nav>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="dados-treino.html">Enviar Dados</a>
+            <a href="resultado.html" class="active">Resultados</a>
+            <a href="modelos.html">Modelos</a>
+        </nav>
+
+        <button class="logout-btn" onclick="sair()">Sair</button>
+    </aside>
+
+    <main class="dashboard-main">
+
+        <header class="dashboard-header">
+            <div>
+                <span class="page-label">Módulo de predição</span>
+                <h1>Resultado da Previsão</h1>
+                <p>Informe o produto e a produção anterior para consultar a estimativa gerada pelo modelo.</p>
+            </div>
+
+            <button class="primary-action" onclick="gerarPrevisaoMock()">
+                Preencher exemplo
+            </button>
+        </header>
+
+        <section class="stats-grid">
+            <div class="stat-card">
+                <span class="card-icon">PRD</span>
+                <p>Produto</p>
+                <h2 id="produtoResultado">---</h2>
+            </div>
+
+            <div class="stat-card">
+                <span class="card-icon">ANT</span>
+                <p>Produção anterior</p>
+                <h2 id="producaoAnterior">---</h2>
+            </div>
+
+            <div class="stat-card">
+                <span class="card-icon">IA</span>
+                <p>Previsão calculada</p>
+                <h2 id="previsaoIa">---</h2>
+            </div>
+
+            <div class="stat-card">
+                <span class="card-icon">STS</span>
+                <p>Status</p>
+                <h2 id="statusResultado">---</h2>
+            </div>
+        </section>
+
+        <section class="table-card form-card">
+
+            <div class="table-header">
+                <div>
+                    <h2>Solicitar previsão</h2>
+                    <p>Preencha os dados abaixo para enviar a solicitação ao serviço de predição.</p>
+                </div>
+
+                <span class="table-badge">Predição individual</span>
+            </div>
+
+            <form id="formPrevisao" class="model-form">
+
+                <div class="form-grid">
+
+                    <div class="form-group">
+                        <label>Produto *</label>
+                        <input type="text" id="produto" placeholder="Ex: Pão Francês">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Produção anterior *</label>
+                        <input type="number" id="producao" placeholder="Ex: 150">
+                    </div>
+
+                </div>
+
+                <div id="mensagemResultado" class="form-message"></div>
+
+                <div class="form-actions">
+                    <button type="submit" class="primary-action">
+                        Solicitar Previsão
+                    </button>
+                </div>
+
+            </form>
+
+        </section>
+
+    </main>
+
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/resultado.js"></script>
+
+</body>
+</html>

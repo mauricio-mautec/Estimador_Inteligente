@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Enviar Dados | Estimador IA</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="dashboard-layout">
+
+    <aside class="sidebar">
+    <div class="sidebar-logo">
+        <div class="brand-mark">EI</div>
+        <div>
+            <strong>Estimador IA</strong>
+            <small>Produção inteligente</small>
+        </div>
+    </div>
+
+    <nav>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="dados-treino.html">Enviar Dados</a>
+        <a href="resultado.html">Resultados</a>
+        <a href="modelos.html">Modelos</a>
+    </nav>
+
+    <button class="logout-btn" onclick="sair()">Sair</button>
+</aside>
+
+    <main class="dashboard-main">
+
+        <header class="dashboard-header">
+            <div>
+                <h1>Enviar Dados de Treino</h1>
+                <p>Faça o envio da base histórica para treinamento do modelo de produção.</p>
+            </div>
+        </header>
+
+        <section class="table-card form-card">
+
+            <div class="table-header">
+                <h2>Base de Treinamento</h2>
+                <p>Envie um arquivo CSV ou Excel contendo o histórico de produção da padaria.</p>
+            </div>
+
+            <form id="formDadosTreino" class="model-form">
+
+                <div class="upload-box">
+                    <div class="upload-icon">📁</div>
+
+                    <h3>Selecione o arquivo de treinamento</h3>
+                    <p>Formatos aceitos: .csv, .xlsx ou .xls</p>
+
+                    <input
+                        type="file"
+                        id="arquivoTreino"
+                        accept=".csv,.xlsx,.xls"
+                    >
+
+                    <span id="nomeArquivo" class="file-name">
+                        Nenhum arquivo selecionado
+                    </span>
+                </div>
+
+                <div class="form-grid">
+
+                    <div class="form-group">
+                        <label>Produto de interesse *</label>
+                        <input
+                            type="text"
+                            id="produtoInteresse"
+                            placeholder="Ex: Pão Francês"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label>Coluna de data *</label>
+                        <input
+                            type="text"
+                            id="colData"
+                            placeholder="Ex: data"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label>Coluna de produto *</label>
+                        <input
+                            type="text"
+                            id="colProduto"
+                            placeholder="Ex: produto"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label>Coluna de quantidade *</label>
+                        <input
+                            type="text"
+                            id="colQuantidade"
+                            placeholder="Ex: total"
+                        >
+                    </div>
+
+                </div>
+
+                <div class="info-box">
+                    <strong>Importante:</strong>
+                    após o envio, o sistema deverá armazenar os dados e informar o serviço de treinamento via mensageria.
+                </div>
+
+                <div id="mensagemDados" class="form-message"></div>
+
+                <div class="form-actions">
+                    <a href="dashboard.html" class="secondary-action">Cancelar</a>
+                    <button type="submit" class="primary-action">
+                        📤 Enviar para Treinamento
+                    </button>
+                </div>
+
+            </form>
+
+        </section>
+
+    </main>
+
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/dados-treino.js"></script>
+
+</body>
+</html>

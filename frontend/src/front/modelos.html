@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Modelos | Estimador IA</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="dashboard-layout">
+
+    <aside class="sidebar">
+    <div class="sidebar-logo">
+        <div class="brand-mark">EI</div>
+        <div>
+            <strong>Estimador IA</strong>
+            <small>Produção inteligente</small>
+        </div>
+    </div>
+
+    <nav>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="dados-treino.html">Enviar Dados</a>
+        <a href="resultado.html">Resultados</a>
+        <a href="modelos.html">Modelos</a>
+    </nav>
+
+    <button class="logout-btn" onclick="sair()">Sair</button>
+</aside>
+
+    <main class="dashboard-main">
+
+        <header class="dashboard-header">
+            <div>
+                <h1>Modelos Disponíveis</h1>
+                <p>Consulte os modelos existentes ou cadastre uma nova configuração.</p>
+            </div>
+
+            <a href="novo-modelo.html" class="primary-action link-button">
+                ➕ Novo Modelo
+            </a>
+        </header>
+
+        <section class="table-card">
+            <div class="table-header">
+                <h2>Catálogo de Modelos</h2>
+                <p>Modelos carregados do sistema e configurações criadas pelo usuário.</p>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Tipo</th>
+                        <th>Descrição</th>
+                        <th>Criado em</th>
+                    </tr>
+                </thead>
+
+                <tbody id="listaModelos"></tbody>
+            </table>
+        </section>
+
+    </main>
+
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/modelos.js"></script>
+
+</body>
+</html>
